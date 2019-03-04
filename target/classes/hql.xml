@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<queries>
+    <query id="buscarPorNome">
+        select p from Projeto p where nome like :nome
+    </query>
+    <query id="buscarPorNomeEId">
+        select p from Projeto p where nome like :nome and id =: id
+    </query>
+</queries>
