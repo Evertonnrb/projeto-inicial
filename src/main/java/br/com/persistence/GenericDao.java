@@ -14,7 +14,11 @@ public interface GenericDao<T> extends Serializable {
 
     List<T> listAll();
 
-    boolean remove(T entity);
+    void remove(T entity);
+
+    T findById(Serializable id);
+
+    List<T> findyByQueryNoParameters(String queryId, int maxResults);
 
     List<T> findByHlQuery(String queryId, List<Object> values, int maxResult);
 }

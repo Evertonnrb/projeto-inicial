@@ -1,4 +1,4 @@
-package br.com.persistence.fileservice;
+package br.com.config;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

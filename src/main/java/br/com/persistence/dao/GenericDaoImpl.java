@@ -1,11 +1,12 @@
 package br.com.persistence.dao;
 
 import br.com.persistence.GenericDao;
-import br.com.persistence.fileservice.XMLService;
+import br.com.config.XMLService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,10 +39,8 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 
     @Override
     public T save(T t) {
-       // manager.getTransaction().begin();
         manager.persist(t);
         manager.flush();
-        //manager.getTransaction().commit();
         return t;
     }
 
@@ -60,9 +59,21 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
     }
 
     @Override
-    public boolean remove(T entity) {
-         manager.remove(entity);
-        return true;
+    public void remove(T entity) {
+         manager.remove(manager.contains(entity) ? entity : manager.merge(entity));
+         manager.flush();
+    }
+
+    @Override
+    public T findById(Serializable id) {
+        return manager.find(this.classe,id);
+    }
+
+    @Override
+    public List<T> findyByQueryNoParameters(String queryId, int maxResults){
+        String hql = hqlQuery.fileValue(queryId);
+        TypedQuery<T> query = manager.createQuery(hql,this.classe);
+        return maxResults == 0 ? query.getResultList() : query.setMaxResults(maxResults).getResultList();
     }
 
     @Override
